@@ -15,6 +15,6 @@ build:
 .PHONY: publish
 publish:
 	for image in $(IMAGES); do \
-        docker push docker.pkg.github.com/ethersphere/bee-images/$$image:$(BEE_VERSION)-$(COMMIT) ; \
 		docker push docker.pkg.github.com/ethersphere/bee-images/$$image:latest ; \
+        docker push docker.pkg.github.com/ethersphere/bee-images/$$image:$(BEE_VERSION)-$(COMMIT) ; \
     done
