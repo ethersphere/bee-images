@@ -8,11 +8,13 @@ all: build publish
 .PHONY: build
 build:
 	for image in $(IMAGES); do \
-        docker build -t docker.pkg.github.com/vandot/bee-images/$$image:$(BEE_VERSION)-$(COMMIT) --build-arg VERSION=$(BEE_VERSION) images/$$image -f $$PWD/Dockerfile ; \
+        docker build -t docker.pkg.github.com/ethersphere/bee-images/$$image:$(BEE_VERSION)-$(COMMIT) --build-arg VERSION=$(BEE_VERSION) images/$$image -f $$PWD/Dockerfile \
+		docker tag docker.pkg.github.com/ethersphere/bee-images/$$image:$(BEE_VERSION)-$(COMMIT) docker.pkg.github.com/ethersphere/bee-images/$$image:latest ; \
     done
 
 .PHONY: publish
 publish:
 	for image in $(IMAGES); do \
-        docker push docker.pkg.github.com/vandot/bee-images/$$image:$(BEE_VERSION)-$(COMMIT) ; \
+        docker push docker.pkg.github.com/ethersphere/bee-images/$$image:$(BEE_VERSION)-$(COMMIT) \
+		docker push docker.pkg.github.com/ethersphere/bee-images/$$image:latest ; \
     done

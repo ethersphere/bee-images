@@ -8,10 +8,7 @@ on:
 
 jobs:
   bee-images:
-    name: Build images
-    env:
-      REPLICA: 3
-      RUN_TYPE: "PR RUN"
+    name: Build and publish images
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -19,8 +16,13 @@ jobs:
         with:
           fetch-depth: 1
       - name: Auth to Github Package Docker Registry
+        if: github.ref == 'refs/heads/master' && success()
         run: |
           echo "${{ secrets.GITHUB_TOKEN }}" | docker login https://docker.pkg.github.com -u ${GITHUB_ACTOR} --password-stdin
-      - name: Build and publish
+      - name: Build images
         run: |
-          make all
+          make build
+      - name: Publish if master branch
+        if: github.ref == 'refs/heads/master' && success()
+        run: |
+          make publish
