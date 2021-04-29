@@ -1,0 +1,26 @@
+on:
+  push:
+    branches:
+      - 'master'
+  pull_request:
+    branches:
+      - '**'
+
+jobs:
+  bee-images:
+    name: Build images
+    env:
+      REPLICA: 3
+      RUN_TYPE: "PR RUN"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 1
+      - name: Auth to Github Package Docker Registry
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login https://docker.pkg.github.com -u ${GITHUB_ACTOR} --password-stdin
+      - name: Build and publish
+        run: |
+          make all
